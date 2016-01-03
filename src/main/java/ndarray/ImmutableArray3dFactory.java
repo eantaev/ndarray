@@ -2,8 +2,10 @@ package ndarray;
 
 import ndarray.function.IntIntIntToDoubleFunction;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
+import static java.util.Objects.requireNonNull;
 import static ndarray.NdArrayUtils.rangeCheck;
 
 /**
@@ -27,18 +29,19 @@ final class ImmutableArray3dFactory implements Array3dFactory<ImmutableArray3d> 
     }
 
     @Override
-    public ImmutableArray3d copyOf(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    public ImmutableArray3d copyOf(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return wrap(numberOfItems, numberOfRows, numberOfColumns, Arrays.copyOf(data, data.length));
     }
 
     @Override
-    public ImmutableArray3d wrap(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    public ImmutableArray3d wrap(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return new ImmutableDenseArray3d(numberOfItems, numberOfRows, numberOfColumns, data);
     }
 
     @Override
     public ImmutableArray3d generate(int numberOfItems, int numberOfRows, int numberOfColumns,
-                                     IntIntIntToDoubleFunction generator) {
+                                     @Nonnull IntIntIntToDoubleFunction generator) {
+        requireNonNull(generator, "generator");
         if (numberOfRows < 0) {
             throw new IllegalArgumentException("numberOfRows should be >= 0");
         }

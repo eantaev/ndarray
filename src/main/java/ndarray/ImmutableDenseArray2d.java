@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
@@ -28,7 +29,7 @@ final class ImmutableDenseArray2d extends DenseArray2d implements ImmutableArray
 
 
     @Override
-    public int readValues(double[] buffer) {
+    public int readValues(@Nonnull double[] buffer) {
         requireNonNull(buffer, "buffer");
         System.arraycopy(data, 0, buffer, 0, data.length);
         return data.length;

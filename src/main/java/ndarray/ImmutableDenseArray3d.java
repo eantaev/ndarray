@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
@@ -12,7 +13,7 @@ import static java.util.Objects.requireNonNull;
  */
 final class ImmutableDenseArray3d extends DenseArray3d implements ImmutableArray3d {
 
-    ImmutableDenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    ImmutableDenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         super(numberOfItems, numberOfRows, numberOfColumns, data);
     }
 
@@ -28,7 +29,7 @@ final class ImmutableDenseArray3d extends DenseArray3d implements ImmutableArray
 
 
     @Override
-    public int readValues(double[] buffer) {
+    public int readValues(@Nonnull double[] buffer) {
         requireNonNull(buffer, "buffer");
         System.arraycopy(data, 0, buffer, 0, data.length);
         return data.length;

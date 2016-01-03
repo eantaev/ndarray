@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
 
@@ -33,7 +34,7 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
     }
 
     @Override
-    public ImmutableArray1d generateEagerly(int length, IntToDoubleFunction generator) {
+    public ImmutableArray1d generateEagerly(int length, @Nonnull IntToDoubleFunction generator) {
         if (length < 0) {
             throw new IllegalArgumentException("length < 0");
         }
@@ -74,6 +75,17 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
         @Override
         public double atUnchecked(int index) {
             return 0;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(length() * 5);
+            sb.append("[0.0");
+            for (int i = 1; i < length(); ++i) {
+                sb.append(", 0.0");
+            }
+            sb.append(']');
+            return sb.toString();
         }
     }
 

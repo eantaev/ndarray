@@ -1,5 +1,10 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import java.util.Arrays;
+
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static ndarray.NdArrayUtils.rangeCheck;
@@ -32,7 +37,7 @@ abstract class DenseArray3d implements Array3d {
         this.data = new double[numberOfItems * numberOfRows * numberOfColumns];
     }
 
-    DenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    DenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         if (numberOfItems < 0) {
             throw new IllegalArgumentException("numberOfItems should be >= 0");
         }
@@ -75,5 +80,28 @@ abstract class DenseArray3d implements Array3d {
         rangeCheck(row, numberOfRows);
         rangeCheck(col, numberOfColumns);
         return item * (numberOfRows * numberOfColumns) + row * numberOfColumns + col;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DenseArray3d that = (DenseArray3d) o;
+
+        return numberOfItems == that.numberOfItems
+            && numberOfRows == that.numberOfRows
+            && numberOfColumns == that.numberOfColumns
+            && Arrays.equals(data, that.data);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = numberOfItems;
+        result = 31 * result + numberOfRows;
+        result = 31 * result + numberOfColumns;
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
     }
 }

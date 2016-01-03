@@ -1,5 +1,6 @@
 package ndarray;
 
+import com.google.common.testing.NullPointerTester;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -30,6 +31,21 @@ public class Array2dTest<A extends Array2d> {
         return Arrays.asList(new Object[][]{
             {NdArrays.immutable2d}, {NdArrays.mutable2d}
         });
+    }
+
+    @Test
+    public void nonnullFactoryMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory);
+    }
+
+    @Test
+    public void wrappedArrayNonnullMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory.wrap(2, 2, new double[]{1, 2, 3, 4}));
+    }
+
+    @Test
+    public void copiedArrayNonnullMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory.copyOf(2, 2, new double[]{1, 2, 3, 4}));
     }
 
     @Test

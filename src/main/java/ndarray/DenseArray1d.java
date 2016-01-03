@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
@@ -34,22 +35,18 @@ public class DenseArray1d implements Array1d {
     }
 
     @Override
-    public int hashCode() {
-        return Arrays.hashCode(data);
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DenseArray1d that = (DenseArray1d) o;
+
+        return Arrays.equals(data, that.data);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (obj == this)
-            return true;
-        if (!(obj instanceof DenseArray1d))
-            return false;
-
-        DenseArray1d array = (DenseArray1d) obj;
-
-        return Arrays.equals(data, array.data);
+    public int hashCode() {
+        return Arrays.hashCode(data);
     }
 
     @Override

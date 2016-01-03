@@ -1,5 +1,8 @@
 package ndarray;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
+
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static ndarray.NdArrayUtils.rangeCheck;
@@ -79,5 +82,25 @@ abstract class DenseArray2d implements Array2d {
         }
         sb.append(']');
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DenseArray2d that = (DenseArray2d) o;
+
+        return numberOfRows == that.numberOfRows
+            && numberOfColumns == that.numberOfColumns
+            && Arrays.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = numberOfRows;
+        result = 31 * result + numberOfColumns;
+        result = 31 * result + Arrays.hashCode(data);
+        return result;
     }
 }

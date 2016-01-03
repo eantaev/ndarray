@@ -1,5 +1,7 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
+
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
@@ -38,7 +40,7 @@ public interface Array2d {
         return values;
     }
 
-    default int readValues(double[] buffer) {
+    default int readValues(@Nonnull double[] buffer) {
         requireNonNull(buffer, "buffer");
         int length = numberOfRows() * numberOfColumns();
         if (buffer.length < length) {

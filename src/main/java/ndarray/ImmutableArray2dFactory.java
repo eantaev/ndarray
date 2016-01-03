@@ -2,7 +2,9 @@ package ndarray;
 
 import ndarray.function.IntIntToDoubleFunction;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static ndarray.NdArrayUtils.rangeCheck;
 
@@ -27,17 +29,18 @@ final class ImmutableArray2dFactory implements Array2dFactory<ImmutableArray2d> 
     }
 
     @Override
-    public ImmutableArray2d copyOf(int numberOfRows, int numberOfColumns, double[] data) {
+    public ImmutableArray2d copyOf(int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return wrap(numberOfRows, numberOfColumns, Arrays.copyOf(data, data.length));
     }
 
     @Override
-    public ImmutableArray2d wrap(int numberOfRows, int numberOfColumns, double[] data) {
+    public ImmutableArray2d wrap(int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return new ImmutableDenseArray2d(numberOfRows, numberOfColumns, data);
     }
 
     @Override
-    public ImmutableArray2d generate(int numberOfRows, int numberOfColumns, IntIntToDoubleFunction generator) {
+    public ImmutableArray2d generate(int numberOfRows, int numberOfColumns, @Nonnull IntIntToDoubleFunction generator) {
+        Objects.requireNonNull(generator, "generator");
         if (numberOfRows < 0) {
             throw new IllegalArgumentException("numberOfRows should be >= 0");
         }

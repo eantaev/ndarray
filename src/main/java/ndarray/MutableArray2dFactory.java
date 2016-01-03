@@ -2,7 +2,10 @@ package ndarray;
 
 import ndarray.function.IntIntToDoubleFunction;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Date: 31.12.15
@@ -33,17 +36,17 @@ final class MutableArray2dFactory implements Array2dFactory<MutableArray2d> {
     }
 
     @Override
-    public MutableArray2d copyOf(int numberOfRows, int numberOfColumns, double[] data) {
+    public MutableArray2d copyOf(int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return wrap(numberOfRows, numberOfColumns, Arrays.copyOf(data, data.length));
     }
 
     @Override
-    public MutableArray2d wrap(int numberOfRows, int numberOfColumns, double[] data) {
+    public MutableArray2d wrap(int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return new MutableDenseArray2d(numberOfRows, numberOfColumns, data);
     }
 
     @Override
-    public MutableArray2d generate(int numberOfRows, int numberOfColumns, IntIntToDoubleFunction generator) {
-        return zeros(numberOfRows, numberOfColumns).fill(generator);
+    public MutableArray2d generate(int numberOfRows, int numberOfColumns, @Nonnull IntIntToDoubleFunction generator) {
+        return zeros(numberOfRows, numberOfColumns).fill(requireNonNull(generator, "generator"));
     }
 }

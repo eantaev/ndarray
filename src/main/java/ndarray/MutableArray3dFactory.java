@@ -2,7 +2,10 @@ package ndarray;
 
 import ndarray.function.IntIntIntToDoubleFunction;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Date: 31.12.15
@@ -33,18 +36,18 @@ final class MutableArray3dFactory implements Array3dFactory<MutableArray3d> {
     }
 
     @Override
-    public MutableArray3d copyOf(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    public MutableArray3d copyOf(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return wrap(numberOfItems, numberOfRows, numberOfColumns, Arrays.copyOf(data, data.length));
     }
 
     @Override
-    public MutableArray3d wrap(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    public MutableArray3d wrap(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         return new MutableDenseArray3d(numberOfItems, numberOfRows, numberOfColumns, data);
     }
 
     @Override
     public MutableArray3d generate(int numberOfItems, int numberOfRows, int numberOfColumns,
-                                   IntIntIntToDoubleFunction generator) {
-        return zeros(numberOfItems, numberOfRows, numberOfColumns).fill(generator);
+                                   @Nonnull IntIntIntToDoubleFunction generator) {
+        return zeros(numberOfItems, numberOfRows, numberOfColumns).fill(requireNonNull(generator, "generator"));
     }
 }

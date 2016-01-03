@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 
 /**
@@ -13,7 +14,7 @@ final class MutableDenseArray3d extends DenseArray3d implements MutableArray3d {
         super(numberOfItems, numberOfRows, numberOfColumns);
     }
 
-    MutableDenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, double[] data) {
+    MutableDenseArray3d(int numberOfItems, int numberOfRows, int numberOfColumns, @Nonnull double[] data) {
         super(numberOfItems, numberOfRows, numberOfColumns, data);
     }
 

@@ -1,7 +1,10 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Date: 31.12.15
@@ -37,7 +40,7 @@ final class MutableArray1dFactory implements Array1dFactory<MutableArray1d> {
     }
 
     @Override
-    public MutableArray1d generateEagerly(int length, IntToDoubleFunction generator) {
-        return zeros(length).fill(generator);
+    public MutableArray1d generateEagerly(int length, @Nonnull IntToDoubleFunction generator) {
+        return zeros(length).fill(requireNonNull(generator, "generator"));
     }
 }

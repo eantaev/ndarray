@@ -1,5 +1,7 @@
 package ndarray;
 
+import com.google.common.testing.EqualsTester;
+import com.google.common.testing.NullPointerTester;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -32,6 +34,29 @@ public class Array1dTest<A extends Array1d> {
 
     public Array1dTest(Array1dFactory<A> factory) {
         this.factory = factory;
+    }
+
+    @Test
+    public void nonnullFactoryMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory);
+    }
+
+    @Test
+    public void wrappedArrayNonnullMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory.wrap(1, 2, 3));
+    }
+
+    @Test
+    public void copiedArrayNonnullMethodsParamsAreChecked() {
+        new NullPointerTester().testAllPublicInstanceMethods(factory.copyOf(1, 2, 3));
+    }
+
+    @Test
+    public void testEquals() {
+        new EqualsTester()
+            .addEqualityGroup(factory.copyOf(1, 2, 3), factory.wrap(1, 2, 3), factory.generateEagerly(3, i -> i + 1))
+            .addEqualityGroup(factory.copyOf(1, 2), factory.wrap(1, 2), factory.generateEagerly(2, i -> i + 1))
+        .testEquals();
     }
 
     @Test

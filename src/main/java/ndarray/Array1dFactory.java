@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
 import java.util.function.IntToDoubleFunction;
 
 /**
@@ -18,5 +19,5 @@ public interface Array1dFactory<A extends Array1d> {
 
     A wrap(double... values);
 
-    A generateEagerly(int length, IntToDoubleFunction generator);
+    A generateEagerly(int length, @Nonnull IntToDoubleFunction generator);
 }
