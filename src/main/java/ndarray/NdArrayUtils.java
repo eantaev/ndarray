@@ -6,8 +6,8 @@ package ndarray;
  *
  * @author Evgeny Antaev
  */
-final class NdArrayUtils {
-    static void rangeCheck(int index, int length) {
+public final class NdArrayUtils {
+    public static void rangeCheck(int index, int length) {
         if (index < 0 || index >= length) {
             throw new IndexOutOfBoundsException(indexOutOfBoundsMsg(index, length));
         }

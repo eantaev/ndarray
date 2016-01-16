@@ -21,7 +21,7 @@ final class MutableArray2dRowView extends Array2dRowView implements MutableArray
 
     @Override
     public MutableArray2dRowView set(int i, double value) {
-        owner.set(rowIndex, i, value);
+        owner.set(sliceIndex, i, value);
         return this;
     }
 }

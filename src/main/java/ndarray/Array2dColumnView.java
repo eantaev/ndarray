@@ -6,14 +6,11 @@ package ndarray;
  *
  * @author Evgeny Antaev
  */
-abstract class Array2dColumnView implements Array1d {
-    final int columnIndex;
+abstract class Array2dColumnView extends Array2dSliceView {
 
-    Array2dColumnView(int columnIndex) {
-        this.columnIndex = columnIndex;
+    Array2dColumnView(int colIndex) {
+        super(colIndex);
     }
-
-    abstract Array2d owner();
 
     @Override
     public int length() {
@@ -21,7 +18,8 @@ abstract class Array2dColumnView implements Array1d {
     }
 
     @Override
-    public double at(int index) {
-        return owner().at(index, columnIndex);
+    public double atUnchecked(int index) {
+        return owner().at(index, sliceIndex);
     }
+
 }

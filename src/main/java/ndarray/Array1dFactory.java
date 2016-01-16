@@ -19,5 +19,5 @@ public interface Array1dFactory<A extends Array1d> {
 
     A wrap(double... values);
 
-    A generateEagerly(int length, @Nonnull IntToDoubleFunction generator);
+    A generate(int length, @Nonnull IntToDoubleFunction generator);
 }

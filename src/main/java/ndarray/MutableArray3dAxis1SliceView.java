@@ -23,7 +23,7 @@ final class MutableArray3dAxis1SliceView extends Array3dAxis1SliceView implement
 
     @Override
     public MutableArray2d set(int row, int col, double value) {
-        owner.set(row, rowIndex, col, value);
+        owner.set(row, sliceIndex, col, value);
         return this;
     }
 }

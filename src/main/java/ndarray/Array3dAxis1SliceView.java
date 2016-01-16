@@ -6,14 +6,11 @@ package ndarray;
  *
  * @author Evgeny Antaev
  */
-abstract class Array3dAxis1SliceView implements Array2d {
-    final int rowIndex;
+abstract class Array3dAxis1SliceView extends Array3dAxisSliceView {
 
     Array3dAxis1SliceView(int rowIndex) {
-        this.rowIndex = rowIndex;
+        super(rowIndex);
     }
-
-    abstract Array3d owner();
 
     @Override
     public int numberOfRows() {
@@ -27,6 +24,6 @@ abstract class Array3dAxis1SliceView implements Array2d {
 
     @Override
     public double at(int row, int col) {
-        return owner().at(row, rowIndex, col);
+        return owner().at(row, sliceIndex, col);
     }
 }

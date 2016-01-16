@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
-import static ndarray.NdArrayUtils.rangeCheck;
 
 /**
  * Date: 29.12.15
@@ -12,7 +11,7 @@ import static ndarray.NdArrayUtils.rangeCheck;
  *
  * @author Evgeny Antaev
  */
-public class DenseArray1d implements Array1d {
+class DenseArray1d extends AbstractArray1d {
     final double[] data;
 
     DenseArray1d(double[] data) {
@@ -24,9 +23,13 @@ public class DenseArray1d implements Array1d {
     }
 
     @Override
-    public final double at(int index) {
-        rangeCheck(index, length());
+    public final double atUnchecked(int index) {
         return data[index];
+    }
+
+    @Override
+    public boolean isZero() {
+        return false;
     }
 
     @Override
@@ -37,16 +40,13 @@ public class DenseArray1d implements Array1d {
     @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
 
-        DenseArray1d that = (DenseArray1d) o;
-
-        return Arrays.equals(data, that.data);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(data);
+        if (o instanceof DenseArray1d) {
+            return Arrays.equals(data, ((DenseArray1d) o).data);
+        } else {
+            return super.equals(o);
+        }
     }
 
     @Override

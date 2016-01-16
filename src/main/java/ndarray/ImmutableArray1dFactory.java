@@ -4,8 +4,6 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
 
-import static ndarray.NdArrayUtils.rangeCheck;
-
 /**
  * Date: 31.12.15
  * Time: 0:12
@@ -34,7 +32,7 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
     }
 
     @Override
-    public ImmutableArray1d generateEagerly(int length, @Nonnull IntToDoubleFunction generator) {
+    public ImmutableArray1d generate(int length, @Nonnull IntToDoubleFunction generator) {
         if (length < 0) {
             throw new IllegalArgumentException("length < 0");
         }
@@ -43,7 +41,7 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
         return wrap(values);
     }
 
-    private static abstract class Array1dWithLength implements Array1d {
+    private static abstract class Array1dWithLength extends AbstractArray1d implements ImmutableArray1d {
         private final int length;
 
         protected Array1dWithLength(int length) {
@@ -57,17 +55,9 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
         public int length() {
             return length;
         }
-
-        abstract double atUnchecked(int index);
-
-        @Override
-        public final double at(int index) {
-            rangeCheck(index, length());
-            return atUnchecked(index);
-        }
     }
 
-    private static final class ImmutableZeroArray1d extends Array1dWithLength implements ImmutableArray1d {
+    private static final class ImmutableZeroArray1d extends Array1dWithLength {
         private ImmutableZeroArray1d(int length) {
             super(length);
         }
@@ -87,9 +77,14 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
             sb.append(']');
             return sb.toString();
         }
+
+        @Override
+        public boolean isZero() {
+            return true;
+        }
     }
 
-    private static final class ImmutableAllTheSameArray1d extends Array1dWithLength implements ImmutableArray1d {
+    private static final class ImmutableAllTheSameArray1d extends Array1dWithLength {
         private final double value;
 
         private ImmutableAllTheSameArray1d(int length, double value) {
@@ -100,6 +95,11 @@ final class ImmutableArray1dFactory implements Array1dFactory<ImmutableArray1d> 
         @Override
         public double atUnchecked(int index) {
             return value;
+        }
+
+        @Override
+        public boolean isZero() {
+            return value == 0d;
         }
     }
 }

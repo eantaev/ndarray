@@ -18,6 +18,8 @@ public interface Array2d {
 
     double at(int row, int col);
 
+    boolean isZero();
+
     Array1d sliceAxis0(int row);
 
     Array1d sliceAxis1(int col);

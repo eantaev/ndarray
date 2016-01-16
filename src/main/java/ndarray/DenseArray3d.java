@@ -75,6 +75,11 @@ abstract class DenseArray3d implements Array3d {
         return data[dataIndex(item, row, col)];
     }
 
+    @Override
+    public boolean isZero() {
+        return false;
+    }
+
     int dataIndex(int item, int row, int col) {
         rangeCheck(item, numberOfItems);
         rangeCheck(row, numberOfRows);

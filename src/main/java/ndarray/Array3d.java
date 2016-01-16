@@ -21,6 +21,8 @@ public interface Array3d {
 
     double at(int item, int row, int col);
 
+    boolean isZero();
+
     Array2d sliceAxis0(int item);
 
     Array2d sliceAxis1(int row);

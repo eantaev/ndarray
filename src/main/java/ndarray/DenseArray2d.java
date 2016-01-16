@@ -1,6 +1,5 @@
 package ndarray;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import static java.lang.String.format;
@@ -13,7 +12,7 @@ import static ndarray.NdArrayUtils.rangeCheck;
  *
  * @author Evgeny Antaev
  */
-abstract class DenseArray2d implements Array2d {
+abstract class DenseArray2d extends AbstractArray2d {
     final int numberOfRows;
     final int numberOfColumns;
     final double[] data;
@@ -52,6 +51,11 @@ abstract class DenseArray2d implements Array2d {
         return data[dataIndex(row, col)];
     }
 
+    @Override
+    public boolean isZero() {
+        return false;
+    }
+
     int dataIndex(int row, int col) {
         rangeCheck(row, numberOfRows());
         rangeCheck(col, numberOfColumns());
@@ -67,40 +71,10 @@ abstract class DenseArray2d implements Array2d {
     }
 
     @Override
-    public String toString() {
-        if (data.length == 0)
-            return "[/]";
-        StringBuilder sb = new StringBuilder(numberOfRows * numberOfColumns * 8);
-        sb.append('[');
-        for (int r = 0; r < numberOfRows; ++r) {
-            sb.append('[');
-            sb.append(at(r, 0));
-            for (int c = 1; c < numberOfColumns; ++c) {
-                sb.append(", ").append(at(r, c));
-            }
-            sb.append("]\n");
-        }
-        sb.append(']');
-        return sb.toString();
-    }
-
-    @Override
-    public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        DenseArray2d that = (DenseArray2d) o;
-
-        return numberOfRows == that.numberOfRows
-            && numberOfColumns == that.numberOfColumns
-            && Arrays.equals(data, that.data);
-    }
-
-    @Override
     public int hashCode() {
-        int result = numberOfRows;
+        int result = Arrays.hashCode(data);
+        result = 31 * result + numberOfRows;
         result = 31 * result + numberOfColumns;
-        result = 31 * result + Arrays.hashCode(data);
         return result;
     }
 }

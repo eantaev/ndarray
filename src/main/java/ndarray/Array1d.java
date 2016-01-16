@@ -14,6 +14,8 @@ public interface Array1d {
 
     double at(int index);
 
+    boolean isZero();
+
     default ImmutableArray1d toImmutable() {
         return this instanceof ImmutableArray1d
             ? (ImmutableArray1d) this

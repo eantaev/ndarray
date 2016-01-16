@@ -23,7 +23,7 @@ final class MutableArray2dColumnView extends Array2dColumnView implements Mutabl
 
     @Override
     public MutableArray1d set(int i, double value) {
-        owner.set(i, columnIndex, value);
+        owner.set(i, sliceIndex, value);
         return this;
     }
 }

@@ -2,6 +2,7 @@ package ndarray;
 
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
+import ndarray.alloc.epoch.EpochArrayAllocator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -28,7 +29,9 @@ public class Array1dTest<A extends Array1d> {
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
             {NdArrays.immutable1d},
-            {NdArrays.mutable1d}
+            {NdArrays.mutable1d},
+            {EpochArrayAllocator.withInitialSize(1 << 10).immutable1d()},
+            {EpochArrayAllocator.withInitialSize(1 << 10).mutable1d()}
         });
     }
 
@@ -54,8 +57,8 @@ public class Array1dTest<A extends Array1d> {
     @Test
     public void testEquals() {
         new EqualsTester()
-            .addEqualityGroup(factory.copyOf(1, 2, 3), factory.wrap(1, 2, 3), factory.generateEagerly(3, i -> i + 1))
-            .addEqualityGroup(factory.copyOf(1, 2), factory.wrap(1, 2), factory.generateEagerly(2, i -> i + 1))
+            .addEqualityGroup(factory.copyOf(1, 2, 3), factory.wrap(1, 2, 3), factory.generate(3, i -> i + 1))
+            .addEqualityGroup(factory.copyOf(1, 2), factory.wrap(1, 2), factory.generate(2, i -> i + 1))
         .testEquals();
     }
 
@@ -153,7 +156,7 @@ public class Array1dTest<A extends Array1d> {
     public void generateCreatesArrayWithGivenLength() {
         int length = 5;
 
-        A a = factory.generateEagerly(length, x -> x);
+        A a = factory.generate(length, x -> x);
 
         assertThat(a.length(), equalTo(length));
     }
@@ -162,7 +165,7 @@ public class Array1dTest<A extends Array1d> {
     public void generateFillsArrayWithFunctionValues() {
         int length = 5;
 
-        A a = factory.generateEagerly(length, x -> x * x);
+        A a = factory.generate(length, x -> x * x);
 
         assertThat(a.at(3), equalTo(9d));
     }

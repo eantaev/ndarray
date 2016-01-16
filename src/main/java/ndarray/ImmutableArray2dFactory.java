@@ -104,6 +104,11 @@ final class ImmutableArray2dFactory implements Array2dFactory<ImmutableArray2d> 
         }
 
         @Override
+        public boolean isZero() {
+            return true;
+        }
+
+        @Override
         public ImmutableArray1d sliceAxis0(int row) {
             rangeCheck(row, numberOfRows());
             return NdArrays.immutable1d.zeros(numberOfColumns());
@@ -132,6 +137,11 @@ final class ImmutableArray2dFactory implements Array2dFactory<ImmutableArray2d> 
         @Override
         public double atUnchecked(int row, int col) {
             return value;
+        }
+
+        @Override
+        public boolean isZero() {
+            return value == 0;
         }
 
         @Override

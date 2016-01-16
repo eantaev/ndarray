@@ -40,7 +40,7 @@ final class MutableArray1dFactory implements Array1dFactory<MutableArray1d> {
     }
 
     @Override
-    public MutableArray1d generateEagerly(int length, @Nonnull IntToDoubleFunction generator) {
+    public MutableArray1d generate(int length, @Nonnull IntToDoubleFunction generator) {
         return zeros(length).fill(requireNonNull(generator, "generator"));
     }
 }
