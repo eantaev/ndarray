@@ -1,5 +1,10 @@
 package ndarray;
 
+import javax.annotation.Nonnull;
+
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+
 /**
  * Date: 02.01.16
  * Time: 17:47
@@ -15,5 +20,23 @@ public final class NdArrayUtils {
 
     private static String indexOutOfBoundsMsg(int index, int length) {
         return "Index: " + index + ", Length: " + length;
+    }
+
+    public static boolean allNonNegative(int... values) {
+        requireNonNull(values, "values");
+        for (int d : values) {
+            if (d < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void throwIllegalArgument(@Nonnull String messageTemplate, Object... args) {
+        throw new IllegalArgumentException(format(requireNonNull(messageTemplate), args));
+    }
+
+    public static void throwIllegalState(@Nonnull String messageTemplate, Object... args) {
+        throw new IllegalStateException(format(requireNonNull(messageTemplate), args));
     }
 }
