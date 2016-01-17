@@ -11,6 +11,7 @@ import java.util.Collection;
 
 import static ndarray.Positions.position;
 import static ndarray.Shapes.shape;
+import static ndarray.Unpooled.expand;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -189,6 +190,35 @@ public class ArrayTest {
     }
 
     @Test
+    public void readValues() {
+        double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+        Array a = factory.wrap(shape(2, 3, 2), data);
+
+        assertArrayEquals(data, a.readValues(), DELTA);
+    }
+
+    @Test
+    public void copyOf() {
+        double[] data = {
+            1, 2,
+            3, 4,
+            5, 6,
+            //---
+            7, 8,
+            9, 10,
+            11, 12};
+
+        Array a = factory.wrap(shape(2, 3, 2), data);
+
+        assertThat(a, equalTo(factory.copyOf(a)));
+    }
+
+    @Test
+    public void sliceOfConstantZeroIsConstantZero() {
+        assertTrue(expand(factory.constantZero(shape(3, 4)), 1, 4).isConstantZero());
+    }
+    @Test
     public void slice2dArray() {
         Array a = factory.wrap(shape(3, 2),
             1, 2,
@@ -285,15 +315,6 @@ public class ArrayTest {
     }
 
     @Test
-    public void readValues() {
-        double[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-
-        Array a = factory.wrap(shape(2, 3, 2), data);
-
-        assertArrayEquals(data, a.readValues(), DELTA);
-    }
-
-    @Test
     public void sliceReadValues() {
         double[] data = {
             1, 2,
@@ -310,22 +331,6 @@ public class ArrayTest {
     }
 
     @Test
-    public void copyOf() {
-        double[] data = {
-            1, 2,
-            3, 4,
-            5, 6,
-            //---
-            7, 8,
-            9, 10,
-            11, 12};
-
-        Array a = factory.wrap(shape(2, 3, 2), data);
-
-        assertThat(a, equalTo(factory.copyOf(a)));
-    }
-
-    @Test
     public void sliceCopyOf() {
         double[] data = {
             1, 2,
@@ -337,6 +342,146 @@ public class ArrayTest {
             11, 12};
 
         Array a = factory.wrap(shape(2, 3, 2), data).slice(1, 2);
+
+        assertThat(a, equalTo(factory.copyOf(a)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void expandAlongNegativeAxisIsMeaningless() {
+        expand(factory.create(shape(3)), -1, 1);
+    }
+
+    @Test
+    public void expandingAlongZeroLengthAxisResultsInConstantZero() {
+        assertTrue(expand(factory.create(shape(3)), 1, 0).isConstantZero());
+    }
+
+    @Test
+    public void expandingConstantZeroResultsInConstantZero() {
+        assertTrue(expand(factory.constantZero(shape(3, 2)), 1, 0).isConstantZero());
+    }
+
+    @Test
+    public void expandArray1dAlongAxis0() {
+        Array a = expand(factory.wrap(shape(3), 1, 2, 3), 0, 2);
+
+        assertThat(a,
+            equalTo(Unpooled.wrap(shape(2, 3),
+                1, 2, 3,
+                1, 2, 3)));
+    }
+
+    @Test
+    public void expandArray1dAlongAxis1() {
+        Array a = expand(factory.wrap(shape(3), 1, 2, 3), 1, 2);
+
+        assertThat(a,
+            equalTo(Unpooled.wrap(shape(3, 2),
+                1, 1,
+                2, 2,
+                3, 3)));
+    }
+
+    @Test
+    public void expandArray2dAlongAxis0() {
+        Array a = expand(
+            factory.wrap(shape(3, 2),
+                1, 2,
+                3, 4,
+                5, 6),
+            0, 2);
+
+        assertThat(a,
+            equalTo(Unpooled.wrap(shape(2, 3, 2),
+                1, 2,
+                3, 4,
+                5, 6,
+                //--
+                1, 2,
+                3, 4,
+                5, 6)));
+    }
+
+    @Test
+    public void expandArray2dAlongAxis1() {
+        Array a = expand(
+            factory.wrap(shape(3, 2),
+                1, 2,
+                3, 4,
+                5, 6),
+            1, 2);
+
+        assertThat(a,
+            equalTo(Unpooled.wrap(shape(3, 2, 2),
+                1, 2,
+                1, 2,
+                //--
+                3, 4,
+                3, 4,
+                //--
+                5, 6,
+                5, 6)));
+    }
+
+    @Test
+    public void expandArray2dAlongAxis2() {
+        Array a = expand(
+            factory.wrap(shape(3, 2),
+                1, 2,
+                3, 4,
+                5, 6),
+            2, 2);
+
+        assertThat(a,
+            equalTo(Unpooled.wrap(shape(3, 2, 2),
+                1, 1,
+                2, 2,
+                //--
+                3, 3,
+                4, 4,
+                //--
+                5, 5,
+                6, 6)));
+    }
+
+    @Test
+    public void expansionIsModifiable() {
+        Array a = factory.wrap(shape(3), 1, 2, 3);
+
+        Array expansion = expand(a, 0, 2);
+        expansion.set(position(1, 1), -2);
+
+        assertThat(expansion,
+            equalTo(factory.wrap(shape(2, 3),
+                1, -2, 3,
+                1, -2, 3)));
+    }
+
+    @Test
+    public void expansionIsView() {
+        Array a = factory.wrap(shape(3), 1, 2, 3);
+
+        Array expansion = expand(a, 0, 2);
+        expansion.set(position(1, 1), -2);
+
+        assertThat(a, equalTo(factory.wrap(shape(3), 1, -2, 3)));
+    }
+
+
+    @Test
+    public void expansionReadValues() {
+        double[] data = {1, 2, 3};
+
+        Array a = expand(factory.wrap(shape(3), data), 0, 2);
+
+        assertArrayEquals(new double[]{1, 2, 3, 1, 2, 3}, a.readValues(), DELTA);
+    }
+
+    @Test
+    public void expansionCopyOf() {
+        double[] data = {1, 2, 3};
+
+        Array a = expand(factory.wrap(shape(3), data), 0, 2);
 
         assertThat(a, equalTo(factory.copyOf(a)));
     }

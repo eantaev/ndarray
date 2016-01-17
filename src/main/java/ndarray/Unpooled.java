@@ -1,5 +1,6 @@
 package ndarray;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
@@ -36,5 +37,11 @@ public final class Unpooled {
 
     public static Array wrap(@Nonnull Shape shape, @Nonnull double... data) {
         return factory.wrap(shape, data);
+    }
+
+    public static Array expand(@Nonnull Array array, @Nonnegative int axisIndex, @Nonnegative int axisLength) {
+        return axisLength == 0 || array.isConstantZero()
+            ? Unpooled.constantZero(array.shape().insert(axisIndex, axisLength))
+            : new ArrayExpansion(array, axisIndex, axisLength);
     }
 }

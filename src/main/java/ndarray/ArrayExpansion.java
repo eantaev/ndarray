@@ -14,19 +14,16 @@ import static ndarray.NdArrayUtils.rangeCheck;
  * @author Evgeny Antaev
  */
 @NotThreadSafe
-final class ArraySlice extends AbstractArray {
+final class ArrayExpansion extends AbstractArray {
     private final Array owner;
     private final Shape shape;
-    private final int sliceAxis;
-    private final int sliceCoordinate;
+    private final int insertedAxis;
     private final OwnerPosition ownerPosition;
 
-    ArraySlice(@Nonnull Array owner, @Nonnegative int sliceAxis, @Nonnegative int sliceCoordinate) {
+    ArrayExpansion(@Nonnull Array owner, @Nonnegative int insertedAxis, @Nonnegative int axisLength) {
         this.owner = requireNonNull(owner, "owner");
-        rangeCheck(sliceCoordinate, owner.shape().axisLength(sliceAxis));
-        this.shape = owner.shape().slice(sliceAxis);
-        this.sliceAxis = sliceAxis;
-        this.sliceCoordinate = sliceCoordinate;
+        this.shape = owner.shape().insert(insertedAxis, axisLength);
+        this.insertedAxis = insertedAxis;
         this.ownerPosition = new OwnerPosition();
     }
 
@@ -67,11 +64,7 @@ final class ArraySlice extends AbstractArray {
         @Override
         public int coordinate(int axis) {
             rangeCheck(axis, numberOfAxes());
-            if (axis < sliceAxis)
-                return localPosition.coordinate(axis);
-            if (axis > sliceAxis)
-                return localPosition.coordinate(axis - 1);
-            return sliceCoordinate;
+            return localPosition.coordinate(axis < insertedAxis ? axis : axis + 1);
         }
     }
 }

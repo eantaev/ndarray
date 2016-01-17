@@ -120,6 +120,31 @@ public final class Shapes {
             return Shapes.shape(newDimensions);
         }
 
+        @Nonnull
+        @Override
+        public Shape insert(@Nonnegative int beforeIndex, @Nonnegative int axisLength) {
+            int origNumberOfAxes = numberOfAxes();
+            if (beforeIndex < 0) {
+                throwIllegalArgument("beforeIndex < 0");
+            }
+            if (beforeIndex > origNumberOfAxes) {
+                throwIllegalArgument("beforeIndex %d > %d numberOfAxes", beforeIndex, origNumberOfAxes);
+            }
+            if (axisLength < 0) {
+                throwIllegalArgument("axisLength < 0");
+            }
+            int[] newDimensions = new int[origNumberOfAxes + 1];
+            int oldAxis = 0;
+            for (int newAxis = 0; newAxis < newDimensions.length; ++newAxis) {
+                if (newAxis == beforeIndex) {
+                    newDimensions[newAxis] = axisLength;
+                } else {
+                    newDimensions[newAxis] = dimensions[oldAxis++];
+                }
+            }
+            return Shapes.shape(newDimensions);
+        }
+
         @Override
         public Iterator<Position> iterator() {
             return new Positions.PositionIterator(this);

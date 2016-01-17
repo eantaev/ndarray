@@ -149,12 +149,69 @@ public class ShapesTest {
         int numberOfCols = 3;
 
         Iterator<Position> it = shape(numberOfItems, numberOfRows, numberOfCols)
-            .slice(1).iterator();
+            .slice(2).iterator();
 
-        for (int item = 0; item < numberOfRows; ++item) {
-            for (int row = 0; row < numberOfCols; ++row) {
+        for (int item = 0; item < numberOfItems; ++item) {
+            for (int row = 0; row < numberOfRows; ++row) {
                 assertTrue(it.hasNext());
                 assertThat(it.next(), equalTo(position(item, row)));
+            }
+        }
+    }
+
+    @Test
+    public void insertAxis0Iteration() {
+        int numberOfItems = 7;
+        int numberOfRows = 5;
+        int numberOfCols = 3;
+
+        Iterator<Position> it = shape(numberOfRows, numberOfCols)
+            .insert(0, numberOfItems).iterator();
+
+        for (int item = 0; item < numberOfItems; ++item) {
+            for (int row = 0; row < numberOfRows; ++row) {
+                for (int col = 0; col < numberOfCols; ++col) {
+                    assertTrue(it.hasNext());
+                    assertThat(it.next(), equalTo(position(item, row, col)));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void insertAxis1Iteration() {
+        int numberOfItems = 7;
+        int numberOfRows = 5;
+        int numberOfCols = 3;
+
+        Iterator<Position> it = shape(numberOfItems, numberOfCols)
+            .insert(1, numberOfRows).iterator();
+
+        for (int item = 0; item < numberOfItems; ++item) {
+            for (int row = 0; row < numberOfRows; ++row) {
+                for (int col = 0; col < numberOfCols; ++col) {
+                    assertTrue(it.hasNext());
+                    assertThat(it.next(), equalTo(position(item, row, col)));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void insertAxis2Iteration() {
+        int numberOfItems = 7;
+        int numberOfRows = 5;
+        int numberOfCols = 3;
+
+        Iterator<Position> it = shape(numberOfItems, numberOfRows)
+            .insert(2, 3).iterator();
+
+        for (int item = 0; item < numberOfItems; ++item) {
+            for (int row = 0; row < numberOfRows; ++row) {
+                for (int col = 0; col < numberOfCols; ++col) {
+                    assertTrue(it.hasNext());
+                    assertThat(it.next(), equalTo(position(item, row, col)));
+                }
             }
         }
     }

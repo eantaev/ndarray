@@ -27,5 +27,8 @@ public interface Shape extends Iterable<Position> {
 
     @Nonnull
     Shape slice(@Nonnegative int axis);
+
+    @Nonnull
+    Shape insert(@Nonnegative int beforeIndex, @Nonnegative int axisLength);
 }
 
