@@ -13,6 +13,9 @@ public interface Array {
     @Nonnull
     Shape shape();
 
+    @Nonnull
+    Slider slider();
+
     double at(@Nonnull Position p);
 
     void set(@Nonnull Position position, double value);

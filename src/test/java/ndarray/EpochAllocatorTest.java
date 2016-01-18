@@ -4,7 +4,7 @@ import ndarray.epoch.EpochArrayAllocator;
 import ndarray.epoch.EpochChangedException;
 import org.junit.Test;
 
-import static ndarray.Shapes.shape;
+import static ndarray.shape.Shapes.shape;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;

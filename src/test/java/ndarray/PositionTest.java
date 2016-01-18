@@ -2,7 +2,7 @@ package ndarray;
 
 import org.junit.Test;
 
-import static ndarray.Positions.position;
+import static ndarray.pos.Positions.position;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 

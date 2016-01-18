@@ -9,9 +9,9 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static ndarray.Positions.position;
-import static ndarray.Shapes.shape;
 import static ndarray.Unpooled.expand;
+import static ndarray.pos.Positions.position;
+import static ndarray.shape.Shapes.shape;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -126,10 +126,10 @@ public class ArrayTest {
         Array a = factory.copyOf(shape(numberOfItems, numberOfRows, numberOfColumns), values);
 
         int index = 0;
-        for (int i = 0; i < numberOfItems; ++i) {
-            for (int r = 0; r < numberOfRows; ++r) {
-                for (int c = 0; c < numberOfColumns; ++c) {
-                    assertThat(a.at(position(i, r, c)), equalTo(values[index++]));
+        for (Slider s = a.slider(); s.x() < numberOfItems; s.advanceX()) {
+            for (s.y(0); s.y() < numberOfRows; s.advanceY()) {
+                for (s.z(0); s.z() < numberOfColumns; s.advanceZ()) {
+                    assertThat(a.at(s), equalTo(values[index++]));
                 }
             }
         }
@@ -168,10 +168,14 @@ public class ArrayTest {
         Array a = factory.wrap(shape(numberOfItems, numberOfRows, numberOfColumns), values);
 
         int index = 0;
+        Slider s = a.shape().slider();
         for (int i = 0; i < numberOfItems; ++i) {
+            s.x(i);
             for (int r = 0; r < numberOfRows; ++r) {
+                s.y(r);
                 for (int c = 0; c < numberOfColumns; ++c) {
-                    assertThat(a.at(position(i, r, c)), equalTo(values[index++]));
+                    s.z(c);
+                    assertThat(a.at(s), equalTo(values[index++]));
                 }
             }
         }
@@ -218,6 +222,7 @@ public class ArrayTest {
     public void sliceOfConstantZeroIsConstantZero() {
         assertTrue(expand(factory.constantZero(shape(3, 4)), 1, 4).isConstantZero());
     }
+
     @Test
     public void slice2dArray() {
         Array a = factory.wrap(shape(3, 2),

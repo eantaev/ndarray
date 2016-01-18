@@ -15,6 +15,12 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractArray implements Array {
 
+    @Nonnull
+    @Override
+    public Slider slider() {
+        return shape().slider();
+    }
+
     @Override
     public void forEach(@Nonnull ArrayConsumer consumer) {
         for (Position pos : shape()) {

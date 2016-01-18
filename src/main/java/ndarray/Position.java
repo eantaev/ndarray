@@ -10,5 +10,17 @@ public interface Position {
     int numberOfAxes();
 
     int coordinate(int axis);
+
+    default int x() {
+        return coordinate(0);
+    }
+
+    default int y() {
+        return coordinate(1);
+    }
+
+    default int z() {
+        return coordinate(2);
+    }
 }
 

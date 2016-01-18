@@ -22,6 +22,8 @@ public interface Shape extends Iterable<Position> {
 
     int elementIndex(@Nonnull Position pos);
 
+    @Nonnull Slider slider();
+
     @Nonnull
     Stream<Position> positionStream();
 

@@ -39,4 +39,8 @@ public final class NdArrayUtils {
     public static void throwIllegalState(@Nonnull String messageTemplate, Object... args) {
         throw new IllegalStateException(format(requireNonNull(messageTemplate), args));
     }
+
+    public static void checkNonNegative(int value, String messageTemplate) {
+        if (value < 0) throwIllegalArgument(messageTemplate, value);
+    }
 }

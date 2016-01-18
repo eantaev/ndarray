@@ -4,8 +4,8 @@ import org.junit.Test;
 
 import java.util.Iterator;
 
-import static ndarray.Positions.position;
-import static ndarray.Shapes.shape;
+import static ndarray.pos.Positions.position;
+import static ndarray.shape.Shapes.shape;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
